@@ -1,0 +1,63 @@
+	
+		<form class="ui form">
+			<!-- Form Name -->
+			<h4 class="ui dividing header">Medida</h4>
+
+			<!-- Text input-->
+			<div class="field">
+				<label for="descricao">Descrição</label>  				
+				<textarea name="descricao"></textarea>
+			</div>
+
+			<!-- Custo -->
+
+			<div class="field">
+				<label>Custo</label>
+				<input type="text" name="custo">
+			</div>
+
+			<!-- Solução -->
+			<div class="field">
+				<div class="ui checkbox">
+					<label for="solucao">Solucionou o problema</label>
+					<input type="checkbox" name="solucao" id="solucao">
+				</div>
+			</div>
+			
+			<!-- Button -->
+			<button id="salvar" name="salvar" class="ui button primary">Salvar</button>
+			<button id="cancelar" name="cancelar" class="ui button secondary">Cancelar</button>
+
+			<div class="ui error message"></div>
+
+		</form>	
+	
+	<script>
+		$(document).ready(function(){
+			$('.ui.form')
+			.form(
+			{
+				fields : {
+					descricao : 
+					{
+						identifier : 'descricao',
+						rules : [{
+							type : 'empty',
+							prompt : 'Informe a descrição da medida'
+						}]
+					},
+					custo : 
+					{
+						identifier : 'custo',
+						rules : [
+						{
+							type : 'empty',
+							prompt : 'Informe o custo da medida'
+						}						]
+					}
+				}
+			}
+			);
+		});
+	</script>
+	</html>

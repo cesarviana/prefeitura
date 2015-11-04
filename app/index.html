@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="prefeituraApp" ng-controller="InicioCtrl">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ titulo }}</title>
+	<link rel="stylesheet" href="bower_components/semantic/dist/semantic.css">
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/semantic/dist/semantic.min.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-route/angular-route.js"></script>
+	<style>
+		body {
+			padding: 30px
+		}
+		.cabecalho span {
+			margin-left: 1em;
+			font-size: 30px;
+		}
+		.titulo-secao {
+			color : gray!important;
+			line-height: 20px !important;
+			padding: 0;
+			height: 35px;
+			text-decoration: underline !important;
+			margin: 0;
+		}
+		#logo-central {
+			text-align: center;
+		}
+		#logo-central img{
+			width: 50%;
+		}
+	</style>
+</head>
+<body>
+	
+	<div class="ui fixed menu">
+     <div class="ui container cabecalho">
+      <div href="#" class="header item">
+        <img class="logo" src="images/logo.svg">
+        <span>Prefeitura</span>
+      </div>
+	</div>
+	</div>
+	
+	<div class="ui grid">
+
+		<div class="four wide column">
+			<menu></menu>
+		</div>
+
+		<div class="twelve wide stretched column">
+			<div class="ui very padded container segment">
+				<div ng-view></div>
+				<div ng-show="!url">
+					<img class="logo" style="margin-right:15px" src="images/logo.svg">
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<script src="js/app.js"></script>
+	<script src="js/directives/menu.js"></script>
+	<script src="js/controllers/InicioCtrl.js"></script>
+	<script src="js/controllers/MedidasCtrl.js"></script>
+	<script src="js/controllers/ProblemasCtrl.js"></script>
+	<script src="js/controllers/CategoriasProblemasCtrl.js"></script>
+	<script src="js/controllers/BairrosCtrl.js"></script>
+	<script src="js/controllers/UsuariosCtrl.js"></script>
+	
+</body>
+</html>

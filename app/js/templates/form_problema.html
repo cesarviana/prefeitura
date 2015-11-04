@@ -1,0 +1,64 @@
+
+
+<form class="ui form">
+	<!-- Form Name -->
+	<h4 class="ui dividing header">Problema</h4>
+
+	<!-- Text input-->
+	<div class="field">
+		<label for="descricao">Descrição</label> 
+		<textarea name="descricao"></textarea>
+	</div>
+
+	<!-- Categoria -->
+	<div class="field">
+		<label>Categoria</label>
+		<select name="categoria" class="ui fluid search dropdown">
+			<option value="">Categoria</option>
+			<option value="1">Pichação</option>
+			<option value="0">Buraco</option>
+		</select>
+	</div>
+	<!-- Data registro -->
+	<div class="field">
+		<label for="data_registro">Data de registro</label>
+		<input type="text" id="data_registro">
+	</div>
+	<!-- Button -->
+	<button id="salvar" name="salvar" class="ui button primary">Salvar</button>
+	<button id="cancelar" name="cancelar" class="ui button secondary">Cancelar</button>
+
+	<div class="ui error message"></div>
+
+</form>	
+
+<script>
+	$(document).ready(
+		$('.ui.form').form({
+			fields : {
+				descricao : {
+					identifier : 'descricao',
+					rules : [{
+						type : 'empty',
+						prompt : 'Informe a descrição do problema'
+					}]
+				},
+				categoria : {
+					identifier : 'categoria',
+					rules : [{
+						type : 'empty',
+						prompt : 'Informe a categoria do problema'
+					}]
+				},
+				data_registro : {
+					identifier : 'data_registro',
+					rules : [{
+						type : 'empty',
+						prompt : 'Informe a data do registro do problema'
+					}]
+				}  
+			}
+		})
+		);
+	</script>
+	

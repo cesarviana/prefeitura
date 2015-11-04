@@ -1,0 +1,39 @@
+
+<form class="ui form">
+	<!-- Form Name -->
+	<h4 class="ui dividing header">Categoria</h4>
+
+	<!-- Text input-->
+	<div class="field">
+		<label for="nome">Nome</label>  
+		<input id="nome" name="nome" placeholder="Nome da categoria" type="text">
+	</div>
+
+	<button id="salvar" name="salvar" class="ui button primary">Salvar</button>
+	<button id="cancelar" name="cancelar" class="ui button secondary">Cancelar</button>
+
+	<div class="ui error message"></div>
+
+</form>	
+
+
+<script>
+	$(document).ready(
+		function(){
+			$('.ui.form')
+			.form({
+				fields : {
+					nome : {
+						identifier : 'nome',
+						rules : [
+						{
+							type : 'empty',
+							prompt : 'Informe o nome da categoria'
+						}
+						]
+					}
+				}
+			});
+		}
+		);
+	</script>
