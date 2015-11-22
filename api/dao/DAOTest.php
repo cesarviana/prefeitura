@@ -1,23 +1,23 @@
 <?php 
 // Testa o dao de usuário
 
-require '../ConnectionFactory.php';
-require '../DAOFactory.php';
+require_once 'ConnectionFactory.php';
+require_once 'DAOFactory.php';
 
-function createUserDAO(){
+function createUsuarioDAO(){
 	$connFactory = ConnectionFactory::getInstance();
-	return DAOFactory::getUserDAO( $connFactory );
+	return DAOFactory::getUsuarioDAO( $connFactory );
 }
 
 function test_getAll(){
-	$dao = createUserDAO();
+	$dao = createUsuarioDAO();
 	print_r( $dao->getAll() );
 }
 function test_getById(){
-	print_r( createUserDAO()->getById(1) );
+	print_r( createUsuarioDAO()->getById(1) );
 }
 function test_save_delete(){
-	$user = (object) array
+	$usuario = (object) array
 	(
 		'id'   => null,
 		'nome' => 'Cristiane',
@@ -25,13 +25,13 @@ function test_save_delete(){
 		'id_tipo_usuario' => 1,
 		'senha'=> 'jfjfjf'
 	);
-	$dao = createUserDAO();
-	$dao->save( $user );
+	$dao = createUsuarioDAO();
+	$dao->save( $usuario );
 	// update
-	$user->nome = 'Cristiane Viana';
-	$dao->save( $user );
+	$usuario->nome = 'Cristiane Viana';
+	$dao->save( $usuario );
 	// delete
-	$dao->delete( $user );
+	$dao->delete( $usuario );
 }
 //phpinfo();
 test_getAll();

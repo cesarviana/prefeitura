@@ -6,87 +6,140 @@
 	<!-- Text input-->
 	<div class="field">
 		<label for="nome">Nome</label>  
-		<input id="nome" name="nome" placeholder="Nome" type="text">
+		<input ng-model="usuario.nome" id="nome" name="nome" placeholder="Nome" type="text">
 	</div>
 
 	<!-- Text input-->
 	<div class="field">
 		<label for="usuario">Usuário</label>  
-		<input id="usuario" name="usuario" placeholder="Login" type="text">
-	</div>
-
-	<!-- Text input-->
-	<div class="field">
-		<label class="label" for="email">E-mail</label>  
-		<input id="email" name="email" placeholder="E-mail" type="text">
+		<input ng-model="usuario.login" id="usuario" name="usuario" placeholder="Login" type="text">
 	</div>
 
 	<!-- Password input-->
 	<div class="field">
 		<label for="senha">Senha</label>
-		<input id="senha" name="senha" placeholder="Senha" type="password">
+		<input ng-model="usuario.senha" id="senha" name="senha" placeholder="Senha" type="password">
 	</div>
-
+	
+	<!-- Tipo -->
+	<div class="field">
+		<label for="tipo">Tipo</label>
+		<select 
+		class="ui dropdown"
+		ng-model="usuario.tipo"
+		ng-options="tipo.nome for tipo in tiposUsuario track by tipo.id"
+		>
+		<option value="">-- Selecione --</option>
+		</select>
+	</div>
+	
 	<!-- Button -->
-	<button id="salvar" name="salvar" class="ui button primary">Salvar</button>
+	<button ng-click="salvar()" id="salvar" name="salvar" class="ui button primary">Salvar</button>
 	<button id="cancelar" name="cancelar" class="ui button secondary">Cancelar</button>
 
 	<div class="ui error message"></div>
 
 </form>	
+
+<table class="ui celled table">
+	<thead>
+		<tr>
+			<th colspan="5"><button class="ui button" ng-click="excluir()">Excluir <i class="remove icon"></i></button></th>
+		</tr>
+		<tr>
+			<th class="center aligned"><input type="checkbox" ng-model="selecionados" ng-change="selecionarTodos()"></th>
+			<th>Código</th>
+			<th>Nome</th>
+			<th>Tipo</th>
+			<th>Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="usuario in usuarios">
+			<td class="center aligned"><input type="checkbox" ng-model="usuario.selecionado"></td>
+			<td class="right aligned">{{ usuario.id }}</td>
+			<td>{{ usuario.nome }}</td>
+			<td>{{ usuario.tipo.nome }}</td>
+			<td class="center aligned">
+				<button ng-click="editar( usuario )" class="ui button" title="Editar"><i class="edit icon"></i></button>
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+		<th colspan="4">
+		<!-- 
+			<div class="ui right floated pagination menu">
+				<a class="icon item">
+					<i class="left chevron icon"></i>
+				</a>
+				<a class="item">1</a>
+				<a class="item">2</a>
+				<a class="item">3</a>
+				<a class="item">4</a>
+				<a class="icon item">
+					<i class="right chevron icon"></i>
+				</a>
+			</div>
+		-->
+		</th>
+		</tr>
+</tfoot>
+</table>
+
 <script>
-	$(document)
-	.ready(function() {
-		$('.ui.form')
-		.form({
-			fields: {
-				nome : {
-					identifier : 'nome',
-					rules: [
-					{
-						type : 'empty',
-						prompt : 'Informe o nome'
-					}
-					]
-				},
-				usuario : {
-					identifier : 'usuario',
-					rules : [
-					{
-						type : 'empty',
-						prompt : 'Informe o usuario'
-					}
-					]
-				},
-				email: {
-					identifier  : 'email',
-					rules: [
-					{
-						type   : 'empty',
-						prompt : 'Informe o e-mail'
-					},
-					{
-						type   : 'email',
-						prompt : 'Informe um e-mail válido'
-					}
-					]
-				},
-				senha: {
-					identifier  : 'senha',
-					rules: [
-					{
-						type   : 'empty',
-						prompt : 'Informe a senha'
-					},
-					{
-						type   : 'length[6]',
-						prompt : 'A senha deve ter ao menos 6 caracteres'
-					}
-					]
-				}
-			}
-		})
-		;
-	})
-	;
+	// $(document)
+	// .ready(function() {
+	// 	$('.ui.form')
+	// 	.form({
+	// 		fields: {
+	// 			nome : {
+	// 				identifier : 'nome',
+	// 				rules: [
+	// 				{
+	// 					type : 'empty',
+	// 					prompt : 'Informe o nome'
+	// 				}
+	// 				]
+	// 			},
+	// 			usuario : {
+	// 				identifier : 'usuario',
+	// 				rules : [
+	// 				{
+	// 					type : 'empty',
+	// 					prompt : 'Informe o usuário'
+	// 				}
+	// 				]
+	// 			},
+	// 			email: {
+	// 				identifier  : 'email',
+	// 				rules: [
+	// 				{
+	// 					type   : 'empty',
+	// 					prompt : 'Informe o e-mail'
+	// 				},
+	// 				{
+	// 					type   : 'email',
+	// 					prompt : 'Informe um e-mail válido'
+	// 				}
+	// 				]
+	// 			},
+	// 			senha: {
+	// 				identifier  : 'senha',
+	// 				rules: [
+	// 				{
+	// 					type   : 'empty',
+	// 					prompt : 'Informe a senha'
+	// 				},
+	// 				{
+	// 					type   : 'length[6]',
+	// 					prompt : 'A senha deve ter ao menos 6 caracteres'
+	// 				}
+	// 				]
+	// 			}
+	// 		}
+	// 	})
+	// 	;
+	// })
+	// ;
 </script>

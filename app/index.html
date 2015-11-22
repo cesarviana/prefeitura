@@ -35,12 +35,12 @@
 <body>
 	
 	<div class="ui fixed menu">
-     <div class="ui container cabecalho">
-      <div href="#" class="header item">
-        <img class="logo" src="images/logo.svg">
-        <span>Prefeitura</span>
-      </div>
-	</div>
+		<div class="ui container cabecalho">
+			<div href="#" class="header item">
+				<img class="logo" src="images/logo.svg">
+				<span>Prefeitura</span>
+			</div>
+		</div>
 	</div>
 	
 	<div class="ui grid">
@@ -50,6 +50,9 @@
 		</div>
 
 		<div class="twelve wide stretched column">
+			<div ng-show="mensagem" class="ui floating message">
+				<p>{{ mensagem }}</p>
+			</div>
 			<div class="ui very padded container segment">
 				<div ng-view></div>
 				<div ng-show="!url">
@@ -59,8 +62,9 @@
 		</div>
 		
 	</div>
-	
+
 	<script src="js/app.js"></script>
+
 	<script src="js/directives/menu.js"></script>
 	<script src="js/controllers/InicioCtrl.js"></script>
 	<script src="js/controllers/MedidasCtrl.js"></script>
@@ -68,6 +72,10 @@
 	<script src="js/controllers/CategoriasProblemasCtrl.js"></script>
 	<script src="js/controllers/BairrosCtrl.js"></script>
 	<script src="js/controllers/UsuariosCtrl.js"></script>
+
+	<script src="js/services/BackService.js"></script>
+	<script src="js/services/MensagensService.js"></script>
+	<script src="js/services/CommonService.js"></script>
 	
 </body>
 </html>

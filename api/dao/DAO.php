@@ -2,7 +2,7 @@
 /**
  * Definição abstrata de um objeto de acesso a dados.
  */
-require '../../util/StrUtil.php';
+require 'StrUtil.php';
 abstract class DAO
 {
 	private $connFactory; // fábrica de conexão
@@ -21,18 +21,99 @@ abstract class DAO
 		return $this->con;
 	}
 
-	// Manage errors
-	protected function error( $exception, $errorCode=500 )
+	public function getAll($order='')
 	{
-		http_response_code( $errorCode );
-		$error = array('text' => $exception->getMessage() );
-		echo json_encode($error);
+		$sqlOrder = '';
+		
+		if( $order || $this->getOrder() ){
+			$sqlOrder = ' ORDER BY ';
+			$sqlOrder .=  $order ? $order : $this->getOrder();
+		}
+		
+		$sql = $this->getSelect() . ' ' . $sqlOrder;
+
+		try {
+			$con = $this->getConn();
+			$stmt = $con->query( $sql );
+			$result = $stmt->fetchAll(PDO::FETCH_OBJ);
+			$this->finalize();
+			return $result;
+		} catch (Exception $e) {
+			$this->error( $e );
+		}
 	}
 
-	// Return json result
-	protected function result( $result )
+	public function getById( $id )
 	{
-		echo json_encode($result);
+		$sql = $this->getSelect() . $this->where();
+		
+		try {
+			$con = $this->getConn();
+			$stmt = $con->prepare( $sql );
+			$stmt->bindParam('id', $id);
+			$stmt->execute();
+			$result = $stmt->fetchObject();
+			$this->finalize();
+			return $result;
+		} catch (Exception $e) {
+			$this->error( $e );	
+		}
+	}
+
+	public function save( &$obj ) 
+	{
+		if( isset($obj) && isset($obj->id) && $obj->id ){
+			$this->update( $obj );
+		} else {
+			$this->insert( $obj );
+		}
+	}
+
+	private function update( &$obj )
+	{
+		echo $sql = $this->getUpdate() . $this->where();
+			
+		$con = $this->getConn();
+		$stmt = $con->prepare( $sql );
+		$this->bind( $stmt, $obj );
+		$stmt->bindParam(':id',$obj->id);
+		$stmt->execute();
+		$this->finalize();
+	
+	}
+
+	protected function insert( &$obj )
+	{
+		$sql = $this->getInsert();
+		
+		$con = $this->getConn();
+		$stmt = $con->prepare( $sql );
+		$this->bind( $stmt, $obj );
+		$stmt->execute();
+		$obj->id = $con->lastInsertId( $this->getSequencenome() );
+		$this->finalize();
+	
+	}
+
+	public function delete( $codes )
+	{
+		$sql = ' DELETE FROM ' . $this->getTable() . ' WHERE id IN('. implode(',', $codes ).')';
+		try {
+			$con = $this->getConn();
+			$stmt = $con->prepare( $sql );
+			$stmt->execute();
+			$this->finalize();
+		} catch (Exception $e) {
+			$this->error( $e );
+		}
+	}
+
+	// Manage errors
+	protected function error( $exception )
+	{
+		http_response_code( 422 );
+		$error = array('message' => $exception->getMessage() );
+		return json_encode($error);
 	}
 
 	// Close connection
@@ -52,6 +133,17 @@ abstract class DAO
 		}
 	}
 
+	protected function rowToObj( $row, &$obj ){
+		foreach($row as $rowProperty => $rowProperyValue ){
+			foreach($obj as $objProperty => &$objProperyValue ){
+				if( $rowProperty == strtolower($objProperty) ){
+					$obj->$objProperty = $rowProperyValue;
+					break;
+				}
+			}
+		}
+	}
+
 	private function paramExists( $words, $param )
 	{
 		foreach ( $words as $w ) {
@@ -60,106 +152,20 @@ abstract class DAO
 		return false;
 	}
 
-	public function getAll($order='')
-	{
-		$sqlOrder = '';
-		
-		if( $order || $this->getOrder() ){
-			$sqlOrder = ' ORDER BY ';
-			$sqlOrder .=  $order ? $order : $this->getOrder();
-		}
-		
-		$sql = $this->getSelect() . ' ' . $sqlOrder;
-
-		try {
-			$con = $this->getConn();
-			$stmt = $con->query( $sql );
-			$result = $stmt->fetchAll(PDO::FETCH_OBJ);
-			$this->finalize();
-			$this->result($result);
-		} catch (Exception $e) {
-			$this->error( $e );
-		}
+	private function where(){
+		$alias = $this->getTableAlias();
+		$alias = $alias ? $alias.'.' : $alias;
+		return ' WHERE ' . $alias. 'id=:id ';
 	}
-
-	public function getById( $id )
-	{
-		$sql = $this->getSelect() . ' WHERE id=:id ';
-
-		try {
-			$con = $this->getConn();
-			$stmt = $con->prepare( $sql );
-			$stmt->bindParam('id', $id);
-			$stmt->execute();
-			$result = $stmt->fetchObject();
-			$this->finalize();
-			$this->result($result);
-		} catch (Exception $e) {
-			$this->error( $e );	
-		}
-	}
-
-	public function save( &$obj ) 
-	{
-		if(isset($obj->id) && $obj->id){
-			$this->update( $obj );
-		} else {
-			$this->insert( $obj );
-		}
-	}
-
-	private function update( &$obj )
-	{
-		$sql = $this->getUpdate() . ' WHERE id=:id';
-		try {	
-			$con = $this->getConn();
-			$stmt = $con->prepare( $sql );
-			$this->bind( $stmt, $obj );
-			$stmt->bindParam(':id',$obj->id);
-			$stmt->execute();
-			$this->finalize();
-		} catch (Exception $e) {
-			$this->error( $e );
-		}	
-	}
-
-	private function insert( &$obj )
-	{
-		$sql = $this->getInsert();
-		try {
-			$con = $this->getConn();
-			$stmt = $con->prepare( $sql );
-			$this->bind( $stmt, $obj );
-			$stmt->execute();
-			$obj->id = $con->lastInsertId( $this->getSequenceName() );
-			$this->finalize();
-		} catch (Exception $e) {
-			$this->error( $e );
-		}	
-	}
-
-	public function delete( $obj )
-	{
-		$sql = ' DELETE FROM ' . $this->getTable() . ' WHERE id=:id ';
-		try {
-			$con = $this->getConn();
-			$stmt = $con->prepare( $sql );
-			$stmt->bindParam(':id',$obj->id);
-			$stmt->execute();
-			$this->finalize();
-		} catch (Exception $e) {
-			$this->error( $e );
-		}
-	}
-
-	// Return the sequence name ( using postgres )
-	protected abstract function getSequenceName();
-	protected abstract function getInsert();
-	protected abstract function getUpdate();
+	// Return the sequence nome ( using postgres )
+	protected function getSequencenome(){}
+	protected function getInsert(){}
+	protected function getUpdate(){}
 	protected function getSelect(){ return 'SELECT * FROM ' . $this->getTable(); }
-	protected abstract function getTable();
+	protected function getTable(){}
 	// Return the order
-	protected function getOrder(){return ''; }
+	protected function getOrder(){}
+	protected function getTableAlias(){}
 }
 
  ?>

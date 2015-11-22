@@ -6,31 +6,57 @@
 	<!-- Text input-->
 	<div class="field">
 		<label for="nome">Nome</label>  
-		<input id="nome" name="nome" placeholder="Nome do bairro" type="text">
+		<input ng-model="bairro.nome" id="nome" name="nome" placeholder="Nome do bairro" type="text">
 	</div>
 
 	<!-- Button -->
-	<button id="salvar" name="salvar" class="ui button primary">Salvar</button>
+	<button ng-click="salvar()" id="salvar" name="salvar" class="ui button primary">Salvar</button>
 	<button id="cancelar" name="cancelar" class="ui button secondary">Cancelar</button>
 
 	<div class="ui error message"></div>
 
 </form>	
 
-<script>
-	$(document).
-	ready(function(){	
-		$('.ui.form')
-		.form({
-			fields : {
-				nome : {
-					identifier : 'nome',
-					rules : [{
-						type : 'empty',
-						prompt : 'Informe o nome do bairro'
-					}]
-				}
-			}
-		});
-	});
-</script>
+<table class="ui celled table">
+	<thead>
+		<tr>
+			<th colspan="4"><button class="ui button" ng-click="excluir()">Excluir <i class="remove icon"></i></button></th>
+		</tr>
+		<tr>
+			<th class="center aligned"><input type="checkbox" ng-model="selecionados" ng-change="selecionarTodos()"></th>
+			<th>Código</th>
+			<th>Nome</th>
+			<th>Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="bairro in bairros">
+			<td class="center aligned"><input type="checkbox" ng-model="bairro.selecionado"></td>
+			<td class="right aligned">{{ bairro.id }}</td>
+			<td>{{ bairro.nome }}</td>
+			<td class="center aligned">
+				<button ng-click="editar( bairro )" class="ui button" title="Editar"><i class="edit icon"></i></button>
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+		<th colspan="4">
+		<!-- 
+			<div class="ui right floated pagination menu">
+				<a class="icon item">
+					<i class="left chevron icon"></i>
+				</a>
+				<a class="item">1</a>
+				<a class="item">2</a>
+				<a class="item">3</a>
+				<a class="item">4</a>
+				<a class="icon item">
+					<i class="right chevron icon"></i>
+				</a>
+			</div>
+		-->
+		</th>
+		</tr>
+</tfoot>
+</table>

@@ -7,16 +7,18 @@
 	<!-- Text input-->
 	<div class="field">
 		<label for="descricao">Descrição</label> 
-		<textarea name="descricao"></textarea>
+		<textarea ng-model="problema.descricao" name="descricao"></textarea>
 	</div>
 
 	<!-- Categoria -->
 	<div class="field">
 		<label>Categoria</label>
-		<select name="categoria" class="ui fluid search dropdown">
-			<option value="">Categoria</option>
-			<option value="1">Pichação</option>
-			<option value="0">Buraco</option>
+		<select
+		class="ui fluid search dropdown"
+		ng-model="problema.categoria" 
+		ng-options="categoria.nome for categoria in categorias track by categoria.id"
+		>
+			<option value="">-- Selecione --</option>
 		</select>
 	</div>
 	<!-- Data registro -->
@@ -32,33 +34,50 @@
 
 </form>	
 
-<script>
-	$(document).ready(
-		$('.ui.form').form({
-			fields : {
-				descricao : {
-					identifier : 'descricao',
-					rules : [{
-						type : 'empty',
-						prompt : 'Informe a descrição do problema'
-					}]
-				},
-				categoria : {
-					identifier : 'categoria',
-					rules : [{
-						type : 'empty',
-						prompt : 'Informe a categoria do problema'
-					}]
-				},
-				data_registro : {
-					identifier : 'data_registro',
-					rules : [{
-						type : 'empty',
-						prompt : 'Informe a data do registro do problema'
-					}]
-				}  
-			}
-		})
-		);
-	</script>
-	
+<table class="ui celled table">
+	<thead>
+		<tr>
+			<th colspan="4"><button class="ui button" ng-click="excluir()">Excluir <i class="remove icon"></i></button></th>
+		</tr>
+		<tr>
+			<th class="center aligned"><input type="checkbox" ng-model="selecionados" ng-change="selecionarTodos()"></th>
+			<th>Código</th>
+			<th>Categoria</th>
+			<th>Data</th>
+			<th>Analista</th>
+			<th>Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="problema in problemas">
+			<td class="center aligned"><input type="checkbox" ng-model="problema.selecionado"></td>
+			<td class="right aligned">{{ problema.id }}</td>
+			<td>{{ problema.categoria.nome }}</td>
+			<td>{{ problema.dataRegistro }}</td>
+			<td>{{ problema.usuario.nome }}</td>
+			<td class="center aligned">
+				<button ng-click="editar( problema )" class="ui button" title="Editar"><i class="edit icon"></i></button>
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+		<th colspan="4">
+		<!-- 
+			<div class="ui right floated pagination menu">
+				<a class="icon item">
+					<i class="left chevron icon"></i>
+				</a>
+				<a class="item">1</a>
+				<a class="item">2</a>
+				<a class="item">3</a>
+				<a class="item">4</a>
+				<a class="icon item">
+					<i class="right chevron icon"></i>
+				</a>
+			</div>
+		-->
+		</th>
+		</tr>
+</tfoot>
+</table>
