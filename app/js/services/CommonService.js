@@ -5,15 +5,15 @@ app.factory('commonService', ['backService','mensagensService', function(backSer
 		
 		backService.post( entidade, obj ).then(
 
-			function()
+			function( response )
 			{
 				sucesso();
-				mensagensService.alerta("O item foi salvo.");
+				mensagensService.alerta( response.data ? response.data : "O item foi salvo." );
 			},
 
-			function()
+			function( response )
 			{
-				mensagneService.resposta( response );
+				mensagensService.resposta( response );
 			}
 
 		);
@@ -57,6 +57,7 @@ app.factory('commonService', ['backService','mensagensService', function(backSer
 			itens[i].selecionado = selecionar;
 		}
 	}
+
 
 	return {
 		salvar : salvar,

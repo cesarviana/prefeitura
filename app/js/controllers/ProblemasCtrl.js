@@ -5,6 +5,8 @@ app.controller('ProblemasCtrl', ['$scope','$rootScope',  'backService', 'commonS
 		$rootScope.titulo = "Problemas";
 		$rootScope.url = 'problemas';
 
+		$scope.dateInputOptions = { dateFormat: 'dd/mm/yy' };
+
 		var atualizar = function()
 		{
 			$scope.problema = {
@@ -14,16 +16,30 @@ app.controller('ProblemasCtrl', ['$scope','$rootScope',  'backService', 'commonS
 				categoria : undefined	
 			};
 
-			mensagensService.alerta("");
+			mensagensService.resposta("");
 
 			backService.getAll( 'problemas' ).then(
-				function(response){
+				function(response)
+				{
 					$scope.problemas = response.data;
+					// Converte datas de string para Date
+					for (var i = $scope.problemas.length - 1; i >= 0; i--) 
+						$scope.problemas[i].dataRegistro = new Date( $scope.problemas[i].dataRegistro.split(' ')[0] );
+					
 				}
+
 			);
+			
 			backService.getAll( 'categorias' ).then(
 				function(response){
 					$scope.categorias = response.data;
+				}
+
+			);
+			
+			backService.getAll( 'bairros' ).then(
+				function(response){
+					$scope.bairros = response.data;
 				}
 			);
 
@@ -32,6 +48,7 @@ app.controller('ProblemasCtrl', ['$scope','$rootScope',  'backService', 'commonS
 		
 
 		$scope.salvar = function(){
+			$scope.problema.usuario = $scope.usuarioLogado();
 			commonService.salvar( $scope.problema, 'problemas', atualizar );
 		};
 

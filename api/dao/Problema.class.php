@@ -9,6 +9,7 @@ class Problema
 	public $categoria;
 	public $bairro;
 	public $usuario;
+	public $solucionado;
 }
 
  ?>

@@ -1,63 +1,90 @@
+
+<form class="ui form">
+
+	<a href="#/problemas/">Voltar para lista de problemas</a>
+
+	<!-- Form Name -->
+	<h4 class="ui dividing header">Medida</h4>
+
+	<div class="ui message">
+		<span><b>Problema:</b></span>
+		<span>{{ problema.descricao }}</span>
+	</div>
+
+	<!-- Text input-->
+	<div class="field">
+		<label for="descricao">Descrição</label>  				
+		<textarea ng-model="medida.descricao" name="descricao"></textarea>
+	</div>
+
+	<!-- Custo -->
+
+	<div class="field">
+		<label>Custo</label>
+		<input ng-model="medida.custo" type="text" name="custo">
+	</div>
+
+	<!-- Solução -->
+	<div class="field">
+		<div class="ui checkbox">
+			<input ng-model="medida.solucao" type="checkbox" id="solucao">
+			<label for="solucao">Solucionou o problema</label>
+		</div>
+	</div>
 	
-		<form class="ui form">
-			<!-- Form Name -->
-			<h4 class="ui dividing header">Medida</h4>
+	<!-- Button -->
+	<button ng-click="salvar()" id="salvar" name="salvar" class="ui button primary">Salvar</button>
+	<button id="cancelar" name="cancelar" class="ui button secondary">Cancelar</button>
 
-			<!-- Text input-->
-			<div class="field">
-				<label for="descricao">Descrição</label>  				
-				<textarea name="descricao"></textarea>
+	<div class="ui error message"></div>
+
+</form>	
+
+
+<table class="ui celled table" ng-init="colspan=7">
+	<thead>
+		<tr>
+			<th colspan="{{colspan}}"><button class="ui button" ng-click="excluir()">Excluir <i class="remove icon"></i></button></th>
+		</tr>
+		<tr>
+			<th class="center aligned"><input type="checkbox" ng-model="selecionados" ng-change="selecionarTodos()"></th>
+			<th>Código</th>
+			<th>Descrição</th>
+			<th>Solução</th>
+			<th>Custo</th>
+			<th>Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="medida in medidas">
+			<td class="center aligned"><input type="checkbox" ng-model="medida.selecionado"></td>
+			<td class="right aligned">{{ medida.id }}</td>
+			<td>{{ medida.descricao }}</td>
+			<td>{{ medida.solucao ? 'Sim' : 'Não' }}</td>
+			<td>{{ medida.custo }}</td>
+			<td class="center aligned">
+				<button ng-click="editar( medida )" class="ui button" title="Editar"><i class="edit icon"></i></button>
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+		<th colspan="{{colspan}}">
+		<!-- 
+			<div class="ui right floated pagination menu">
+				<a class="icon item">
+					<i class="left chevron icon"></i>
+				</a>
+				<a class="item">1</a>
+				<a class="item">2</a>
+				<a class="item">3</a>
+				<a class="item">4</a>
+				<a class="icon item">
+					<i class="right chevron icon"></i>
+				</a>
 			</div>
-
-			<!-- Custo -->
-
-			<div class="field">
-				<label>Custo</label>
-				<input type="text" name="custo">
-			</div>
-
-			<!-- Solução -->
-			<div class="field">
-				<div class="ui checkbox">
-					<label for="solucao">Solucionou o problema</label>
-					<input type="checkbox" name="solucao" id="solucao">
-				</div>
-			</div>
-			
-			<!-- Button -->
-			<button id="salvar" name="salvar" class="ui button primary">Salvar</button>
-			<button id="cancelar" name="cancelar" class="ui button secondary">Cancelar</button>
-
-			<div class="ui error message"></div>
-
-		</form>	
-	
-	<script>
-		$(document).ready(function(){
-			$('.ui.form')
-			.form(
-			{
-				fields : {
-					descricao : 
-					{
-						identifier : 'descricao',
-						rules : [{
-							type : 'empty',
-							prompt : 'Informe a descrição da medida'
-						}]
-					},
-					custo : 
-					{
-						identifier : 'custo',
-						rules : [
-						{
-							type : 'empty',
-							prompt : 'Informe o custo da medida'
-						}						]
-					}
-				}
-			}
-			);
-		});
-	</script>
-	</html>
+		-->
+		</th>
+		</tr>
+</tfoot>
+</table>

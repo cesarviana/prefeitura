@@ -31,11 +31,19 @@ class BairroDAO extends DAO
 		return self::$instance;
 	}
 
+	public function save( $bairro ){
+		if(!$bairro)
+			throw new Exception('Nenhuma informação para ser salva.', 422);
+		if(!$bairro->nome)
+			throw new Exception('O nome do bairro deve ser informado.', 422);
+		parent::save( $bairro );
+	}
+
 	public function getTable(){
 		return $this->_table;
 	}
 
-	public function getSequencenome(){
+	public function getSequenceName(){
 		return $this->_seqnome;
 	}
 

@@ -41,10 +41,10 @@
 
 </form>	
 
-<table class="ui celled table">
+<table class="ui celled table" ng-init="colspan=5">
 	<thead>
 		<tr>
-			<th colspan="5"><button class="ui button" ng-click="excluir()">Excluir <i class="remove icon"></i></button></th>
+			<th colspan="{{colspan}}"><button class="ui button" ng-click="excluir()">Excluir <i class="remove icon"></i></button></th>
 		</tr>
 		<tr>
 			<th class="center aligned"><input type="checkbox" ng-model="selecionados" ng-change="selecionarTodos()"></th>
@@ -67,7 +67,7 @@
 	</tbody>
 	<tfoot>
 		<tr>
-		<th colspan="4">
+		<th colspan="{{colspan}}">
 		<!-- 
 			<div class="ui right floated pagination menu">
 				<a class="icon item">

@@ -42,7 +42,7 @@ class TipoUsuarioDAO extends DAO
 	// 	return $this->_table;
 	// }
 
-	// public function getSequencenome(){
+	// public function getSequenceName(){
 	// 	return $this->_seqnome;
 	// }
 

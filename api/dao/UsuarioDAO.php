@@ -43,6 +43,26 @@ class UsuarioDAO extends DAO
 		return self::$instance;
 	}
 
+	public function save( $usuario ){
+		if(!$usuario)
+			throw new Exception('Nenhuma informação para ser salva.', 422);
+		$msgErro = "";
+		if(!$usuario->nome)
+			$msgErro .= 'O nome do usuário deve ser informado.' . PHP_EOL;
+		if(!$usuario->senha)
+			$msgErro .= 'A senha do usuário deve ser informada.' . PHP_EOL;
+		if(!$usuario->login)
+			$msgErro .= 'O login deve ser informado.' . PHP_EOL;
+		if(!$usuario->tipo)
+			$msgErro .= 'O tipo do usuário deve ser informado.' . PHP_EOL;
+
+		if( $msgErro )
+			throw new Exception( $msgErro , 422 );
+			
+
+		parent::save( $usuario );
+	}
+
 	/**
 	 * Faz o bind das propriedades de segundo nível
 	 */
@@ -55,12 +75,37 @@ class UsuarioDAO extends DAO
 		$list = array();
 		$rows = parent::getAll( $order );
 		foreach ($rows as $row) {
-			$usuario = new Usuario();
-			parent::rowToObj( $row, $usuario );
-			$usuario->tipo  = new TipoUsuario( $row->id_tipo, $row->tipo );
-			array_push( $list, $usuario );
+			array_push( $list, $this->createObj( $row ) );
 		}
 		return $list;
+	}
+
+	public function getById($id){
+		$row = parent::getById($id);
+		return $this->createObj( $row );
+	}
+
+	public function getByAccess( $usuario, $senha )
+	{
+		$senha = sha1( $usuario.$senha );
+		$sql = $this->getSelect() . ' WHERE senha LIKE :senha';
+		$con = $this->getConn();
+		$stmt = $con->prepare( $sql );
+		$stmt->bindParam('senha', $senha);
+		$stmt->execute();
+		$result = $stmt->fetchObject();
+		
+		if( !$result )
+			throw new Exception('Usuário ou senha inválidos.', 401);
+
+		return $this->createObj( $result );
+	}
+
+	public function createObj( $row ){
+		$usuario = new Usuario();
+		parent::rowToObj( $row, $usuario );
+		$usuario->tipo = new TipoUsuario( $row->id_tipo, $row->tipo );
+		return $usuario;
 	}
 
 	protected function insert($usuario){
@@ -79,7 +124,7 @@ class UsuarioDAO extends DAO
 		return $this->_table;
 	}
 
-	public function getSequencenome(){
+	public function getSequenceName(){
 		return $this->_seqnome;
 	}
 

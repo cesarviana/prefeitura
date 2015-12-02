@@ -31,11 +31,23 @@ class CategoriaDAO extends DAO
 		return self::$instance;
 	}
 
+	public function save( $categoria ){
+
+		if(!$categoria->custo) $categoria->custo = 0;
+
+		if(!$categoria->nome)
+			throw new Exception("O nome deve ser informado.", 422);
+
+		parent::save( $categoria );
+			
+	}
+
+
 	public function getTable(){
 		return $this->_table;
 	}
 
-	public function getSequencenome(){
+	public function getSequenceName(){
 		return $this->_seqnome;
 	}
 

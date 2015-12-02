@@ -4,10 +4,15 @@
 	<meta charset="UTF-8">
 	<title>{{ titulo }}</title>
 	<link rel="stylesheet" href="bower_components/semantic/dist/semantic.css">
+	<link rel="stylesheet" href="bower_components/jquery-ui/themes/pepper-grinder/jquery-ui.css"/>
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/jquery-ui/jquery-ui.js"></script>
 	<script src="bower_components/semantic/dist/semantic.min.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-messages/angular-messages.js"></script>
+	<script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
 	<script src="bower_components/angular-route/angular-route.js"></script>
+	<script src="bower_components/angular-ui-date/src/date.js"></script>
 	<style>
 		body {
 			padding: 30px
@@ -30,10 +35,16 @@
 		#logo-central img{
 			width: 50%;
 		}
+		.centralizado {
+			margin: 0 auto;
+		}
 	</style>
 </head>
 <body>
 	
+	<!-- 
+	CABECALHO
+	-->
 	<div class="ui fixed menu">
 		<div class="ui container cabecalho">
 			<div href="#" class="header item">
@@ -43,13 +54,20 @@
 		</div>
 	</div>
 	
-	<div class="ui grid">
 
-		<div class="four wide column">
+	<div class="ui grid">
+		
+		<!--
+		MENU
+		-->
+		<div class="four wide column" ng-hide="esconderMenu">
 			<menu></menu>
 		</div>
-
-		<div class="twelve wide stretched column">
+		
+		<!--
+		CONTEUDO
+		-->
+		<div class="twelve wide stretched column" ng-class="{ centralizado : esconderMenu }">
 			<div ng-show="mensagem" class="ui floating message">
 				<p>{{ mensagem }}</p>
 			</div>
@@ -66,16 +84,23 @@
 	<script src="js/app.js"></script>
 
 	<script src="js/directives/menu.js"></script>
+	<script src="js/controllers/LoginCtrl.js"></script>
 	<script src="js/controllers/InicioCtrl.js"></script>
 	<script src="js/controllers/MedidasCtrl.js"></script>
 	<script src="js/controllers/ProblemasCtrl.js"></script>
 	<script src="js/controllers/CategoriasProblemasCtrl.js"></script>
 	<script src="js/controllers/BairrosCtrl.js"></script>
 	<script src="js/controllers/UsuariosCtrl.js"></script>
+	
+	<script src="js/controllers/RelatorioProblemasMesCtrl.js"></script>
+	<script src="js/controllers/RelatorioProblemasCategoriaCtrl.js"></script>
+	<script src="js/controllers/RelatorioCustoCategoriaCtrl.js"></script>
 
 	<script src="js/services/BackService.js"></script>
 	<script src="js/services/MensagensService.js"></script>
 	<script src="js/services/CommonService.js"></script>
+	<script src="js/services/Session.js"></script>
+	<script src="js/services/AuthService.js"></script>
 	
 </body>
 </html>

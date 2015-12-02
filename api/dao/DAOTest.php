@@ -3,6 +3,7 @@
 
 require_once 'ConnectionFactory.php';
 require_once 'DAOFactory.php';
+require_once 'RelatorioProblemasPorMes.php';
 
 function createUsuarioDAO(){
 	$connFactory = ConnectionFactory::getInstance();
@@ -33,9 +34,15 @@ function test_save_delete(){
 	// delete
 	$dao->delete( $usuario );
 }
+function test_relatorio_problemas_mes(){
+	$rel = new RelatorioProblemasPorMes( ConnectionFactory::getInstance() );
+	print_r( $rel->getAll() );
+}
+
 //phpinfo();
 test_getAll();
 test_getById();
-test_save_delete();
+//test_save_delete();
+test_relatorio_problemas_mes();
 
  ?>

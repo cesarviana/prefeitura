@@ -60,6 +60,25 @@ abstract class DAO
 		}
 	}
 
+	public function getByFk( $fkName, $fkValue )
+	{
+		$fkName = filter_var($fkName);
+
+		$sql = $this->getSelect() . " WHERE $fkName=:fkValue";
+		
+		try {
+			$con  = $this->getConn();
+			$stmt = $con->prepare( $sql );
+			$stmt->bindParam('fkValue', $fkValue);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_OBJ);
+			$this->finalize();
+			return $result;
+		} catch (Exception $e) {
+			$this->error( $e );	
+		}
+	}
+
 	public function save( &$obj ) 
 	{
 		if( isset($obj) && isset($obj->id) && $obj->id ){
@@ -71,7 +90,7 @@ abstract class DAO
 
 	private function update( &$obj )
 	{
-		echo $sql = $this->getUpdate() . $this->where();
+		$sql = $this->getUpdate() . $this->where();
 			
 		$con = $this->getConn();
 		$stmt = $con->prepare( $sql );
@@ -90,14 +109,14 @@ abstract class DAO
 		$stmt = $con->prepare( $sql );
 		$this->bind( $stmt, $obj );
 		$stmt->execute();
-		$obj->id = $con->lastInsertId( $this->getSequencenome() );
+		$obj->id = $con->lastInsertId( $this->getSequenceName() );
 		$this->finalize();
 	
 	}
 
-	public function delete( $codes )
+	public function delete( $ids )
 	{
-		$sql = ' DELETE FROM ' . $this->getTable() . ' WHERE id IN('. implode(',', $codes ).')';
+		$sql = ' DELETE FROM ' . $this->getTable() . ' WHERE id IN('. implode(',', $ids ).')';
 		try {
 			$con = $this->getConn();
 			$stmt = $con->prepare( $sql );
@@ -128,9 +147,17 @@ abstract class DAO
 		$words = StrUtil::multiexplode( array(' ','=',',','(',')'), $stmt->queryString );
 		foreach ($obj as $key => &$value) {
 			if( $this->paramExists( $words, $key ) ){
-				$stmt->bindParam($key, $value);
+				$stmt->bindParam($key, $this->convert($value) );
 			}
 		}
+	}
+
+	// Conversão de valores
+	private function convert( $value ){
+		if(is_bool($value)){
+			return $value ? 't' : 'f';
+		}
+		else return $value;
 	}
 
 	protected function rowToObj( $row, &$obj ){
@@ -158,7 +185,7 @@ abstract class DAO
 		return ' WHERE ' . $alias. 'id=:id ';
 	}
 	// Return the sequence nome ( using postgres )
-	protected function getSequencenome(){}
+	protected function getSequenceName(){}
 	protected function getInsert(){}
 	protected function getUpdate(){}
 	protected function getSelect(){ return 'SELECT * FROM ' . $this->getTable(); }

@@ -11,14 +11,14 @@ app.controller('UsuariosCtrl', ['$scope','$rootScope','backService','commonServi
 		{
 			
 			$scope.usuario = { 
-				nome: '',
-				login:'',
-				senha: '',
-				tipo: { id: 0 }
+				nome: undefined,
+				login:undefined,
+				senha: undefined,
+				tipo: undefined
 			};
 
 			// limpa mensagem
-			mensagensService.alerta("");
+			mensagensService.resposta("");
 			
 			backService.getAll( 'usuarios' ).then( 
 				function(response){

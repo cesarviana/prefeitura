@@ -21,48 +21,64 @@
 			<option value="">-- Selecione --</option>
 		</select>
 	</div>
+
+	<!-- Bairro -->
+	<div class="field">
+		<label>Bairro</label>
+		<select
+		class="ui fluid search dropdown"
+		ng-model="problema.bairro" 
+		ng-options="bairro.nome for bairro in bairros track by bairro.id"
+		>
+			<option value="">-- Selecione --</option>
+		</select>
+	</div>
 	<!-- Data registro -->
 	<div class="field">
 		<label for="data_registro">Data de registro</label>
-		<input type="text" id="data_registro">
+		<input ng-model="problema.dataRegistro" ui-date="dateInputOptions">
 	</div>
+	
 	<!-- Button -->
-	<button id="salvar" name="salvar" class="ui button primary">Salvar</button>
+	<button ng-click="salvar()" id="salvar" name="salvar" class="ui button primary">Salvar</button>
 	<button id="cancelar" name="cancelar" class="ui button secondary">Cancelar</button>
 
 	<div class="ui error message"></div>
 
 </form>	
 
-<table class="ui celled table">
+<table class="ui celled table" ng-init="colspan=7">
 	<thead>
 		<tr>
-			<th colspan="4"><button class="ui button" ng-click="excluir()">Excluir <i class="remove icon"></i></button></th>
+			<th colspan="{{colspan}}"><button class="ui button" ng-click="excluir()">Excluir <i class="remove icon"></i></button></th>
 		</tr>
 		<tr>
 			<th class="center aligned"><input type="checkbox" ng-model="selecionados" ng-change="selecionarTodos()"></th>
 			<th>Código</th>
 			<th>Categoria</th>
+			<th>Bairro</th>
 			<th>Data</th>
 			<th>Analista</th>
 			<th>Ações</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="problema in problemas">
+		<tr ng-class="{ negative : !problema.solucionado, positive : problema.solucionado }" ng-repeat="problema in problemas">
 			<td class="center aligned"><input type="checkbox" ng-model="problema.selecionado"></td>
 			<td class="right aligned">{{ problema.id }}</td>
 			<td>{{ problema.categoria.nome }}</td>
-			<td>{{ problema.dataRegistro }}</td>
+			<td>{{ problema.bairro.nome }}</td>
+			<td>{{ problema.dataRegistro | date:'dd/MM/yyyy'  }}</td>
 			<td>{{ problema.usuario.nome }}</td>
 			<td class="center aligned">
 				<button ng-click="editar( problema )" class="ui button" title="Editar"><i class="edit icon"></i></button>
+				<a href="#/medidas/{{problema.id}}" class="ui button" title="Medidas">Medidas</a>
 			</td>
 		</tr>
 	</tbody>
 	<tfoot>
 		<tr>
-		<th colspan="4">
+		<th colspan="{{colspan}}">
 		<!-- 
 			<div class="ui right floated pagination menu">
 				<a class="icon item">

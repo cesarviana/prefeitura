@@ -1,12 +1,15 @@
 app.factory('mensagensService', function($rootScope){
 	
-	function resposta( response ){
-		$rootScope.mensagem = response.data.message ;
-	}
-
 	function alerta( mensagem, codigo ){
 		if(mensagem)
 			alert( mensagem );
+	}
+
+	function resposta( response ){
+		if( !response )
+			$rootScope.mensagem = '';
+		else
+			alerta( response.data.message );
 	}
 
 	function confirmar( mensagem ){

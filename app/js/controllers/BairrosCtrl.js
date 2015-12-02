@@ -12,7 +12,7 @@ app.controller('BairrosCtrl', ['$scope','$rootScope',  'backService', 'commonSer
 				nome : ''
 			};
 
-			mensagensService.alerta("");
+			mensagensService.resposta("");
 
 			backService.getAll( 'bairros' ).then(
 				function(response){

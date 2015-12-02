@@ -12,7 +12,7 @@ app.controller('CategoriasProblemasCtrl', ['$scope','$rootScope',  'backService'
 				nome : ''
 			};
 
-			mensagensService.alerta("");
+			mensagensService.resposta("");
 
 			backService.getAll( 'categorias' ).then(
 				function(response){

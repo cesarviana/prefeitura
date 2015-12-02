@@ -7,6 +7,7 @@ require_once 'TipoUsuarioDAO.php';
 require_once 'BairroDAO.php';
 require_once 'CategoriaDAO.php';
 require_once 'ProblemaDAO.php';
+require_once 'MedidaDAO.php';
 
 class DAOFactory
 {
@@ -24,6 +25,9 @@ class DAOFactory
 	}
 	public static function getProblemaDAO( $connFactory ){
 		return ProblemaDAO::getInstance( $connFactory );
+	}
+	public static function getMedidaDAO( $connFactory ){
+		return MedidaDAO::getInstance( $connFactory );
 	}
 }
  ?>

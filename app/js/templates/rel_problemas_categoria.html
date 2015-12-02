@@ -1,0 +1,15 @@
+<table class="ui celled table">
+	<thead>
+		<tr><th colspan="2" class="center aligned">Relatório de problemas por categoria</th></tr>
+		<tr>
+			<th class="center aligned">Categoria</th>
+			<th class="center aligned">Quantidade</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="linha in linhas">
+			<td class="center aligned">{{ linha.categoria }}</td>
+			<td class="center aligned">{{ linha.quantidade }}</td>
+		</tr>
+	</tbody>
+</table>
