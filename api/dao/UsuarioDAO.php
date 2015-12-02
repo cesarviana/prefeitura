@@ -59,7 +59,7 @@ class UsuarioDAO extends DAO
 		if( $msgErro )
 			throw new Exception( $msgErro , 422 );
 			
-
+		$usuario->senha = sha1($usuario->login.$usuario->senha);
 		parent::save( $usuario );
 	}
 

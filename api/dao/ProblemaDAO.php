@@ -19,7 +19,7 @@ class ProblemaDAO extends DAO
 		p.id_bairro,
 		(SELECT COUNT(m.id) FROM medida m WHERE m.id_problema = p.id AND m.solucao = \'t\') AS solucionado
 	 FROM problema p
-	 INNER JOIN medida m ON m.id_problema = p.id';
+	 LEFT JOIN medida m ON m.id_problema = p.id';
 
 	private $_insert  = 'INSERT INTO problema ( descricao, data_registro, id_categoria, id_bairro, id_usuario ) 
 	 					 VALUES (:descricao, :data_registro, :id_categoria, :id_bairro, :id_usuario)'; 
